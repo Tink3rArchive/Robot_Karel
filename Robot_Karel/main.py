@@ -32,10 +32,12 @@ while karel == finish:
 
 
 def move(karel,direction):
-  direction = get_direction()
   moves = {"up": (0, -1), "down": (0, 1), "left": (-1, 0), "right": (1, 0)}
   x, y = karel
-  dx, dy = moves[direction]
+  nudge = moves.get(direction)
+  if nudge is None:
+    return karel
+  dx, dy = nudge
   new_x = x + dx
   new_y = y + dy
   if 0 <= new_x <= 4 and 0 <= new_y <= 4:
@@ -43,4 +45,7 @@ def move(karel,direction):
   return karel
 
 
-print(karel)
+print(move((2, 2), "up"))
+print(move((0, 0), "up"))
+print(move((2, 2), None))
+
