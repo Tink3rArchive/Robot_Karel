@@ -1,5 +1,29 @@
 # from machine import Pin
 import random
+import neopixel
+
+
+buttons = {
+  "select" : Pin(4, Pin.IN, Pin.PULL_UP),
+  "start" : Pin(5, Pin.IN, Pin.PULL_UP),
+  "up" : Pin(13, Pin.IN, Pin.PULL_UP),
+  "down" : Pin(14, Pin.IN, Pin.PULL_UP),
+  "left" : Pin(25, Pin.IN, Pin.PULL_UP),
+  "right" : Pin(26, Pin.IN, Pin.PULL_UP),
+}
+
+switch = {
+  "easy" : Pin(32, Pin.IN, Pin.PULL_UP),
+  "hard" : Pin(33, Pin.IN, Pin.PULL_UP),
+}
+
+# Neopixel Grid
+grid_pixel = Pin(16, Pin.OUT)
+grid = neopixel.NeoPixel(grid_pixel, 25)
+
+# Lonely Neopixel
+lonely_pixel = Pin(17, Pin.OUT)
+mode_light = neopixel.NeoPixel(lonely_pixel, 1)
 
 
 def xy_to_index(x, y):
@@ -15,10 +39,6 @@ def random_cell():
   return (x, y)
 
 def get_direction():
-  # up = Pin(11, Pin.IN, Pin.PULL_UP)
-  # down = Pin(12, Pin.IN, Pin.PULL_UP)
-  # left = Pin(13, Pin.IN, Pin.PULL_UP)
-  # right = Pin(14, Pin.IN, Pin.PULL_UP)
   typed = input("move? ")
   keymap = {"z": "up", "s": "down", "q": "left", "d": "right"}
   return keymap.get(typed)
@@ -48,6 +68,14 @@ def draw(karel, finish):
         row += "."
     print(row)
   print()
+
+def mode_select():
+  if switch["easy"].value() == 0 and switch["hard"].value() == 1:
+    return "easy"
+  elif switch["easy"].value() == 1 and switch["hard"].value() == 0:
+    return "hard"
+  else:
+    return "inter"
 
 finish = random_cell()
 
